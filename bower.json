@@ -1,0 +1,21 @@
+{
+  "name": "expenses-app",
+  "version": "0.0.0",
+  "authors": [
+    "Jiew Meng <jiewmeng@gmail.com>"
+  ],
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "v4.0.0-alpha.2"
+  }
+}
