@@ -5,7 +5,6 @@ public/js/libs.js
 public/css/app.css
 public/css/app.css.map
 
-.parse.*
 *.map
 node_modules
 bower_components
