@@ -8,3 +8,5 @@ public/css/app.css.map
 *.map
 node_modules
 bower_components
+
+build
