@@ -4,18 +4,10 @@ Another app to try out
 
 - ES6
 - React/Redux
-- Browserify/watchify
+- WebPack
 - NPM Script as a "build tool"
-- OrientDB
-  - Graph/Document DB Hybrid
-  - With transactions support
 
-## Development Guide
-
-- `npm run copy` to copy static files
-- `npm run develop` to start `nodemon`, `browser-sync` and `watchify`
-
-## Seperation of Concerns
+## Seperation of Concerns?
 
 - Server (API)
 - Client (React/Redux)

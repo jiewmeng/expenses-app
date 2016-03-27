@@ -1,53 +1,33 @@
 'use strict';
 
-const fs = require('fs');
 const path = require('path');
-const Promise = require('bluebird');
-const readdir = Promise.promisify(fs.readdir);
-const staticFiles = require('koa-static');
-const koaWinston = require('koa-winston');
-const koaBody = require('koa-body');
-const views = require('koa-views');
+const serveStatic = require('feathers').static;
+const favicon = require('serve-favicon');
+const compress = require('compression');
+const cors = require('cors');
+const feathers = require('feathers');
+const configuration = require('feathers-configuration');
+const hooks = require('feathers-hooks');
+const rest = require('feathers-rest');
+const bodyParser = require('body-parser');
 
-const createLogger = require('./misc/createLogger.js');
-const handleErrors = require('./middlewares/handleErrors');
-const handle404Errors = require('./middlewares/handle404Errors');
+const middleware = require('./middleware');
+const services = require('./services');
 
-let app = require('koa')();
+const app = feathers();
 
-app.use(koaWinston(createLogger()));
-app.use(handleErrors);
-app.use(handle404Errors);
+app.configure(configuration(path.join(__dirname, '..')));
 
-app.use(staticFiles(path.resolve(`${__dirname}/../build`)));
-app.use(koaBody());
-app.use(views(`${__dirname}/views`, {
-  map: {
-    jade: 'jade'
-  },
-  extension: 'jade'
-}));
+app.use(compress())
+  .options('*', cors())
+  .use(cors())
+  .use(favicon( path.join(app.get('public'), 'favicon.ico') ))
+  .use('/', serveStatic( app.get('public') ))
+  .use(bodyParser.json())
+  .use(bodyParser.urlencoded({ extended: true }))
+  .configure(hooks())
+  .configure(rest())
+  .configure(services)
+  .configure(middleware);
 
-Promise.coroutine(function *() {
-  const routerDir = `${__dirname}/routers`;
-  let routerFiles = yield readdir(routerDir);
-  yield Promise.map(routerFiles, function(file) {
-    let routes = require(`${routerDir}/${file}`);
-    let router = require('koa-router')();
-
-    Object.keys(routes).forEach(function(route) {
-      let matches = /^(get|post|put|patch|delete) (.*)$/.exec(route);
-      if (!matches) throw new Error(`Error parsing routes: ${route}`);
-
-      router[matches[1]](matches[2], routes[route]);
-    })
-
-    app
-      .use(router.routes())
-      .use(router.allowedMethods());
-  });
-
-  const PORT = process.env.PORT || 8000;
-  app.listen(PORT);
-  console.log(`Server listening on ${PORT}`);
-})();
+module.exports = app;
