@@ -2,7 +2,7 @@ module.exports = {
   context: `${__dirname}/src/public`,
   entry: `./react/index.jsx`,
   output: {
-    path: `${__dirname}/build/js`,
+    path: `${__dirname}/public/js`,
     filename: `index.js`
   },
   module: {

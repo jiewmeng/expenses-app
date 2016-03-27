@@ -9,22 +9,22 @@
     },
     "local": false,
     "facebook": {
-      "clientID": "your facebook client id",
-      "clientSecret": "your facebook client secret",
+      "clientID": "FB_ID",
+      "clientSecret": "FB_SECRET",
       "permissions": {
         "scope": ["public_profile","email"]
       }
     },
     "github": {
-      "clientID": "your github client id",
-      "clientSecret": "your github client secret",
+      "clientID": "GITHUB_ID",
+      "clientSecret": "GITHUB_SECRET",
       "permissions": {
         "scope": []
       }
     },
     "google": {
-      "clientID": "your google client id",
-      "clientSecret": "your google client secret",
+      "clientID": "GOOGLE_ID",
+      "clientSecret": "GOOGLE_SECRET",
       "permissions": {
         "scope": ["profile"]
       }

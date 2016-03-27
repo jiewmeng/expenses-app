@@ -1,7 +1,7 @@
 'use strict';
 
 // user-model.js - A mongoose model
-// 
+//
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 
@@ -9,6 +9,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
+  name: { type: String },
+
   facebookId: { type: String },
   facebook: { type: Schema.Types.Mixed },
   githubId: { type: String },
