@@ -61,21 +61,31 @@ watch(`${SRCDIR}/public/scss`, function() {
   });
 });
 
+watch(`${SRCDIR}/public`, function(file) {
+  let relativePath = path.relative(`${SRCDIR}/public`, file);
+
+  if (relativePath.match(/^(react|scss)/)) {
+    return console.log(`WATCH: skip ${relativePath}`);
+  }
+
+  let destPath = `${BUILDDIR}/${relativePath}`;
+  let destPathRelativeBuild = path.relative(BUILDDIR, destPath)
+  fs.createReadStream(file)
+    .pipe(fs.createWriteStream(destPath))
+    .on('finish', () => console.log(`Wrote to ${destPathRelativeBuild}`));
+});
+
 nodemon
   .on('start', function() {
     console.log('Nodemon started');
-    if (!browserSyncInitialized) {
-      browserSync.init({
-        server: BUILDDIR,
-        notify: true,
-        files: [
-          `${BUILDDIR}/**/*`
-        ]
-      });
-      browserSyncInitialized = true;
-    } else {
-      setTimeout(browserSync.reload, 500);
-    }
+    browserSync.init({
+      server: BUILDDIR,
+      notify: true,
+      files: [
+        `${BUILDDIR}/**/*`
+      ]
+    });
+
   })
   .on('quit', function() {
     console.log('Nodemon stopped');
