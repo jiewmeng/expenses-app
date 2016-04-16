@@ -43,6 +43,7 @@ let webpackWatcher = webpacker.watch({}, function(err, stats) {
   }
 })
 
+console.log(`${SRCDIR}/public/scss`)
 watch(`${SRCDIR}/public/scss`, function() {
   const OUTFILE = `${BUILDDIR}/css/app.css`;
   sass.render({
@@ -78,14 +79,14 @@ watch(`${SRCDIR}/public`, function(file) {
 nodemon
   .on('start', function() {
     console.log('Nodemon started');
-    browserSync.init({
+    if (!browserSyncInitialized) browserSync.init({
       server: BUILDDIR,
       notify: true,
       files: [
         `${BUILDDIR}/**/*`
       ]
     });
-
+    browserSyncInitialized = true;
   })
   .on('quit', function() {
     console.log('Nodemon stopped');
