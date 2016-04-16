@@ -1,3 +1,8 @@
+'use strict';
+
+const precss = require('precss');
+const autoprefixer = require('autoprefixer');
+
 module.exports = {
   context: `${__dirname}/src/public`,
   entry: `./react/index.jsx`,
@@ -16,13 +21,20 @@ module.exports = {
         }
       },
       {
-        test: /\.css$/,
-        loader: 'style-loader!css-loader'
+        test: /(\.css|\/css)$/,
+        loader: 'style-loader!css-loader!postcss-loader'
       },
       {
         test: /\.scss$/,
         loaders: ['style', 'css', 'sass']
+      },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        loader: 'url-loader?limit=100000'
       }
     ]
+  },
+  postcss() {
+    return [precss, autoprefixer];
   }
 }
