@@ -23,8 +23,8 @@
       }
     },
     "google": {
-      "clientID": "GOOGLE_ID",
-      "clientSecret": "GOOGLE_SECRET",
+      "clientID": "1009433701788-r40vdhch809bqnhptfnpqmpcqm36u6nq.apps.googleusercontent.com",
+      "clientSecret": "6fK2_TUbrMQphHqz7_r8-4qx",
       "permissions": {
         "scope": ["profile"]
       }

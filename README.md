@@ -1,13 +1,12 @@
 # Expenses app
 
-TODO: ERROR "ReactMount: Root element has been removed from its original container. New container: [object HTMLDivElement]" when adding expense
-
 Another app to try out
 
 - ES6
 - React/Redux
 - WebPack
 - NPM Script as a "build tool"
+- KOA (tried feathers but felt its abit too complicated ... less support on stackoverflow)
 
 ## Seperation of Concerns?
 

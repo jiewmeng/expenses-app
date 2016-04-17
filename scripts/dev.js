@@ -36,7 +36,10 @@ let webpackWatcher = webpacker.watch({}, function(err, stats) {
 
   stats = stats.toJson();
   if (stats.errors.length > 0) {
-    return console.error('WEBPACK ERROR', stats.errors);
+    console.error('WEBPACK ERROR');
+
+    stats.errors.forEach(console.error.bind(console));
+    return;
   }
   if (stats.warnings.length > 0) {
     return console.error('WEBPACK WARNING', stats.warnings);

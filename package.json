@@ -31,6 +31,7 @@
     "css-loader": "^0.23.1",
     "feathers": "^2.0.0",
     "feathers-authentication": "^0.4.1",
+    "feathers-client": "^1.1.0",
     "feathers-configuration": "^0.2.1",
     "feathers-errors": "^2.0.2",
     "feathers-hooks": "^1.5.0",
