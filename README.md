@@ -25,18 +25,18 @@ unitCost | float |
 qty | int |
 unit | String |
 totalCost | float |
-category | String | 
+category | String |
 tags | Array<String> |
-receipt | Receipt | 
+receipt | Receipt |
 timestamp | timestamp |
 user | User |
 
-### Receipt 
+### Receipt
 
 Field | Type | Description
 ------|------|------------
 image | String |
-totalCost | Float | 
+totalCost | Float |
 location | String |
 timestamp | String |
 user | User |
@@ -49,7 +49,7 @@ name | String |
 color | String |
 user | User |
 
-### Tag 
+### Tag
 
 Field | Type | Description
 ------|------|------------
@@ -60,3 +60,16 @@ user | User |
 
 - displayName
 - facebookId
+
+## React Hierarchy
+
+* [unauthenticated]
+  + Login Button
+    - onClick: login with google TODO!!!
+    - onLogin: login with server
+    - onLoginFail: show error
+
+* [authenticated]
+  + Profile
+    + Login Button
+    + Logout Button

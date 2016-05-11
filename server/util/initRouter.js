@@ -1,5 +1,7 @@
 'use strict';
 
+const Promise = require('bluebird');
+
 /**
  * Matches a valid route eg. `post /article/1`
  */
@@ -59,7 +61,7 @@ module.exports = function(app, routes) {
     let route = parseRouteDfn(routeDfn);
     let routeActions = parseRouteActions(routes[routeDfn]);
     let middlewares = routeActions.map((handler) => {
-      let controller = require(`./controllers/${handler.controller}`);
+      let controller = require(`../controllers/${handler.controller}`);
       if (!controller.hasOwnProperty(handler.action)) {
         throw new Error(`Route Invalid: "${route.method} ${route.url}": Controller action "${handler.action}" not found in "${handler.controller}"`)
       }
@@ -70,5 +72,7 @@ module.exports = function(app, routes) {
   });
 
   app.use(router.routes())
-    .use(router.allowedMethods())
+    .use(router.allowedMethods());
+
+  return Promise.resolve();
 };
