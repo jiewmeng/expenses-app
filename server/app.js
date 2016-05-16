@@ -10,21 +10,38 @@ let initRouter = require('./util/initRouter');
 let routes = require('./routes');
 let initDb = require('./util/initDb');
 let initConfig = require('./util/initConfig');
-
-app.use(koaBody());
-app.use(function*(next) {
-  this.set('Access-Control-Allow-Origin', 'http://localhost:8080');
-  yield next;
-});
+const AppError = require('./classes/AppError');
 
 app.use(function*(next) {
   try {
     yield next;
   } catch (err) {
-    this.status = err.status || 500;
-    this.body = {error: err.message};
+    let details = {};
+
+    if (err.name === 'ValidationError') {
+      this.status = 400;
+      console.log(err)
+      Object.keys(err.errors).forEach((k) => {
+        details[k] = err.errors[k].message;
+      });
+    } else {
+      this.status = 500;
+    }
+
+    this.body = {
+      error: err.message,
+      details
+    };
     this.app.emit('error', err, this);
   }
+});
+
+app.use(koaBody());
+app.use(function*(next) {
+  this.set('Access-Control-Allow-Headers', ['Content-Type', 'Authorization']);
+  this.set('Access-Control-Allow-Origin', 'http://localhost:8080');
+  if (this.request.type !== 'application/json' && /^(POST|PUT)$/i.test(this.method)) throw new AppError('Content-Type should be application/json for POST/PUT methods', 400);
+  yield next;
 });
 
 initConfig(app)

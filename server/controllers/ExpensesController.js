@@ -1,20 +1,32 @@
 const Expense = require('../models/Expense');
 const ExpensesService = require('../services/Expenses');
+const Promise = require('bluebird');
 
 module.exports = {
   /**
    * Gets expenses (paginated) for given user
    */
   index: function*(next) {
-    const expenses = yield Expense.find({ user: this.state.user._id }).lean();
-    this.body = expenses;
+    const queryParams = this.request.query;
+    let paginationCondition = {};
+
+    if (typeof queryParams.lt === 'string') {
+      paginationCondition._id = { $lt: queryParams.lt };
+    }
+
+    const data = yield Expense.queryPaged({
+      findQuery: { _user: this.state.user._id },
+      sort: '-_id',
+      paginationCondition
+    });
+    this.body = data;
   },
 
   add: function*(next) {
-    const params = ExpensesService.filter(this.request.body);
-
-    yield ExpensesService.validate(params);
-    const expense = yield ExpensesService.add(params);
-    this.body = expenses;
+    const params = Object.assign({}, this.request.body, {
+      _user: this.state.user._id
+    });
+    const expense = yield Expense.create(params);
+    this.body = expense;
   }
 }

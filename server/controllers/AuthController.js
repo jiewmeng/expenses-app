@@ -12,7 +12,7 @@ module.exports = {
    * If a user with associated Google ID does not exists, one is created.
    */
   google: function*(next) {
-    let idToken = JSON.parse(this.request.body).id_token;
+    let idToken = this.request.body.id_token;
 
     if (!idToken) return this.throw('Missing ID token', 400);
     let id = yield Auth.verifyGoogleIdToken(idToken);

@@ -10,6 +10,9 @@ export const appLoginGoogleUser = (idToken) => {
       method: 'post',
       body: JSON.stringify({
         id_token: idToken
+      }),
+      headers: new Headers({
+        'Content-Type': 'application/json'
       })
     })
       .then((resp) => {
