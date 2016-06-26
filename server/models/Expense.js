@@ -36,9 +36,25 @@ const expenseSchema = new Schema({
   },
   place: String,
   notes: String,
-  paymentMethod: {type: ObjectId, ref: 'PaymentMethod'},
-  _category: {type: ObjectId, ref: 'Category'},
-  _user: {type: ObjectId, ref: 'User'}
+  _paymentMethod: {
+    type: ObjectId,
+    ref: 'PaymentMethod',
+    validate: {
+      validator: (paymentMethod, done) => {
+        console.log('paymentMethod', paymentMethod);
+        done();
+      },
+      message: 'Payment method is invalid'
+    }
+  },
+  _category: {
+    type: ObjectId,
+    ref: 'Category'
+  },
+  _user: {
+    type: ObjectId,
+    ref: 'User'
+  }
 });
 
 expenseSchema.pre('validate', function(next) {

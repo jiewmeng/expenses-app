@@ -95,7 +95,7 @@ module.exports = {
       displayName: id.name,
       email: id.email,
       image: id.picture
-    }, {upsert: true});
+    }, { upsert: true });
 
     let payload = {
       sub: user._id,

@@ -1,9 +1,11 @@
-export const AUTH_GOOGLE_LOGIN = Symbol('AUTH_GOOGLE_LOGIN')
 export const AUTH_GOOGLE_LOGGED_IN = Symbol('AUTH_GOOGLE_LOGGED_IN')
 export const AUTH_GOOGLE_FAILED = Symbol('AUTH_GOOGLE_FAILED')
 export const AUTH_APP_LOGIN_GOOGLE_USER = Symbol('AUTH_APP_LOGIN_GOOGLE_USER')
 export const AUTH_APP_LOGGED_IN = Symbol('AUTH_APP_LOGGED_IN')
 
+/**
+ * Login to app via Google (ID Token)
+ */
 export const appLoginGoogleUser = (idToken) => {
   return (dispatch) => {
     return fetch(`http://localhost:8000/auth/google`, {
@@ -32,10 +34,6 @@ export const appLoginGoogleUser = (idToken) => {
   }
 }
 
-export const doGoogleLogin = () => {
-  type: AUTH_GOOGLE_LOGIN
-}
-
 /**
  * When Google authenticates user passing idToken
  */
@@ -47,12 +45,18 @@ export const loggedInWithGoogle = (result) => {
   }
 }
 
+/**
+ * Failed to get Google ID token
+ */
 export const failedLoginWithGoogle = (err) => {
   return Object.assign(err, {
     type: AUTH_GOOGLE_FAILED
   })
 }
 
+/**
+ * Successfully got an app access token
+ */
 export const appLoggedIn = (data) => {
   return {
     type: AUTH_APP_LOGGED_IN,

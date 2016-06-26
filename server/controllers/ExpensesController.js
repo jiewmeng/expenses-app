@@ -24,9 +24,38 @@ module.exports = {
 
   add: function*(next) {
     const params = Object.assign({}, this.request.body, {
-      _user: this.state.user._id
+      _user: this.state.user._id,
+      _paymentMethod: this.request.body.paymentMethod,
     });
     const expense = yield Expense.create(params);
     this.body = expense;
+  },
+
+  edit: function*(next) {
+    const params = _.pick(this.request.body, [
+      'name', 'unitCost', 'totalCost', 'quantity',
+      'date', 'place', 'notes', 'paymentMethod', 'category']);
+    const condition = {
+      _id: this.params.id,
+      _user: this.state.user._id
+    };
+    const category = yield Category.findOne(condition);
+
+    if (!category) throw new AppError('Category not found', 404);
+    yield Category.update(condition, params);
+
+    this.response.body = null;
+  },
+
+  delete: function*(next) {
+    const id = this.params.id;
+    const user = this.state.user;
+
+    yield Category.remove({
+      _id: id,
+      _user: user
+    })
+
+    this.response.body = null;
   }
 }

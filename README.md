@@ -73,3 +73,17 @@ user | User |
   + Profile
     + Login Button
     + Logout Button
+
+## RESTful stuff
+
+- `index`: listing page
+  - Search (field(s))
+  - Pagination (perPage, min, max)
+  - Sort (field)
+- `findOne`: detail page: is there a need? (can just index and search)
+  - ID
+- `edit`
+  - ID
+  - Body params
+- `delete`
+  - ID

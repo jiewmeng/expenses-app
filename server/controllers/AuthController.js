@@ -20,9 +20,13 @@ module.exports = {
     if (id.aud !== this.config.auth.google.clientId) return this.throw('Invalid ID token (not for this app)', 400);
 
     let token = yield Auth.loginOrSignupGoogleUser(id, this.config.key);
+    console.log('token', token)
     this.body = token;
   },
 
+  /**
+   * Middleware that authenticates an application access token.
+   */
   authToken: function*(next) {
     const regexAuthHeader = /^Bearer (.+)$/;
     const authHeader = this.request.get('authorization');

@@ -13,4 +13,6 @@ module.exports = {
 
   'get /categories': [AUTHENTICATED, 'CategoriesController.index'],
   'post /categories': [AUTHENTICATED, 'CategoriesController.add'],
+  'put /categories/:id': [AUTHENTICATED, 'CategoriesController.edit'],
+  'delete /categories/:id': [AUTHENTICATED, 'CategoriesController.delete'],
 };
