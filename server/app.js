@@ -11,6 +11,9 @@ let routes = require('./routes');
 let initDb = require('./util/initDb');
 let initConfig = require('./util/initConfig');
 const AppError = require('./classes/AppError');
+const mongoose = require('mongoose');
+
+mongoose.Promise = require('bluebird');
 
 app.use(function*(next) {
   try {

@@ -3,6 +3,8 @@ const Promise = require('bluebird');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 const queryPaged = require('./_queryPaged');
+const PaymentMethod = require('./PaymentMethod');
+const Category = require('./Category');
 
 const expenseSchema = new Schema({
   name: {
@@ -38,14 +40,7 @@ const expenseSchema = new Schema({
   notes: String,
   _paymentMethod: {
     type: ObjectId,
-    ref: 'PaymentMethod',
-    validate: {
-      validator: (paymentMethod, done) => {
-        console.log('paymentMethod', paymentMethod);
-        done();
-      },
-      message: 'Payment method is invalid'
-    }
+    ref: 'PaymentMethod'
   },
   _category: {
     type: ObjectId,
@@ -57,6 +52,7 @@ const expenseSchema = new Schema({
   }
 });
 
+// set defaults
 expenseSchema.pre('validate', function(next) {
   if (typeof this.quantity === 'undefined') {
     this.quantity = 1;
@@ -78,7 +74,51 @@ expenseSchema.pre('validate', function(next) {
     this.date = new Date();
   }
 
-  next();
+  // some actual validation
+  if (this.quantity * this.unitCost !== this.totalCost) {
+    next(new Error('Quantity * Unit Cost != Total Cost'));
+  }
+
+  let validatePaymentMethod = new Promise((resolve, reject) => {
+    if (typeof this._paymentMethod !== 'undefined') {
+      return PaymentMethod.findOne({
+        _user: this._user,
+        _id: this._paymentMethod
+      }, '_id')
+        .then((method) => {
+          if (!method) {
+            return reject(new Error('Invalid payment method'));
+          }
+          resolve();
+        })
+        .catch(reject);
+    }
+    return resolve();
+  });
+
+  let validateCategory = new Promise((resolve, reject) => {
+    if (typeof this._category !== 'undefined') {
+      return Category.findOne({
+        _user: this._user,
+        _id: this._category
+      }, '_id')
+        .then((category) => {
+          if (!category) {
+            return reject(new Error('Invalid category'));
+          }
+          resolve();
+        })
+        .catch(reject);
+    }
+    return resolve();
+  });
+
+  Promise.all([
+    validatePaymentMethod,
+    validateCategory
+  ])
+    .then(() => next())
+    .catch(next);
 });
 
 expenseSchema.statics.queryPaged = queryPaged;

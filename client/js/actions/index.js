@@ -58,6 +58,7 @@ export const failedLoginWithGoogle = (err) => {
  * Successfully got an app access token
  */
 export const appLoggedIn = (data) => {
+  console.log(`APP ACCESS TOKEN: ${data.access_token}`);
   return {
     type: AUTH_APP_LOGGED_IN,
     accessToken: data.access_token,

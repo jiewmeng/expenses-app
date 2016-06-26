@@ -7,6 +7,8 @@ module.exports = {
 
   'get /expenses': [AUTHENTICATED, 'ExpensesController.index'],
   'post /expenses': [AUTHENTICATED, 'ExpensesController.add'],
+  'put /expenses/:id': [AUTHENTICATED, 'ExpensesController.edit'],
+  'delete /expenses/:id': [AUTHENTICATED, 'ExpensesController.delete'],
 
   'get /paymentMethods': [AUTHENTICATED, 'PaymentMethodController.index'],
   'post /paymentMethods': [AUTHENTICATED, 'PaymentMethodController.add'],

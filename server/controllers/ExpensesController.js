@@ -1,6 +1,7 @@
 const Expense = require('../models/Expense');
 const ExpensesService = require('../services/Expenses');
 const Promise = require('bluebird');
+const _ = require('lodash');
 
 module.exports = {
   /**
@@ -17,7 +18,11 @@ module.exports = {
     const data = yield Expense.queryPaged({
       findQuery: { _user: this.state.user._id },
       sort: '-_id',
-      paginationCondition
+      paginationCondition,
+      populate: [
+        '_paymentMethod',
+        '_category'
+      ]
     });
     this.body = data;
   },
@@ -35,14 +40,18 @@ module.exports = {
     const params = _.pick(this.request.body, [
       'name', 'unitCost', 'totalCost', 'quantity',
       'date', 'place', 'notes', 'paymentMethod', 'category']);
+    if (params.paymentMethod) params._paymentMethod = params.paymentMethod;
+    if (params.category) params._category = params.category;
     const condition = {
       _id: this.params.id,
       _user: this.state.user._id
     };
-    const category = yield Category.findOne(condition);
+    const expense = yield Expense.findOne(condition);
 
-    if (!category) throw new AppError('Category not found', 404);
-    yield Category.update(condition, params);
+    if (!expense) throw new AppError('Expense not found', 404);
+
+    Object.assign(expense, params);
+    yield expense.save();
 
     this.response.body = null;
   },
@@ -51,7 +60,7 @@ module.exports = {
     const id = this.params.id;
     const user = this.state.user;
 
-    yield Category.remove({
+    yield Expense.remove({
       _id: id,
       _user: user
     })

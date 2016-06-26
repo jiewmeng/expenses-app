@@ -68,6 +68,7 @@ module.exports = function(app, routes) {
       return controller[handler.action];
     });
 
+    console.log(`DEBUG ROUTER: ${route.method} ${route.url}`)
     router[route.method](route.url, ...middlewares);
   });
 

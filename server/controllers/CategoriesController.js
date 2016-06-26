@@ -25,11 +25,11 @@ module.exports = {
       _id: this.params.id,
       _user: this.state.user._id
     };
-    console.log(condition);
     const category = yield Category.findOne(condition);
 
     if (!category) throw new AppError('Category not found', 404);
-    yield Category.update(condition, params);
+    Object.assign(category, params);
+    yield category.save();
 
     this.response.body = null;
   },
